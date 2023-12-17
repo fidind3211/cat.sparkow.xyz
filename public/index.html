@@ -21,18 +21,8 @@
 
     <!-- Main Content -->
     <div class="container my-5">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="cat1.jpg" class="card-img-top" alt="Cat 1">
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img src="cat2.jpg" class="card-img-top" alt="Cat 2">
-                </div>
-            </div>
-            <!-- Add more cat images in similar format -->
+        <div class="row" id="gallery">
+            <!-- Images and videos will be loaded here -->
         </div>
     </div>
 
@@ -41,6 +31,77 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+        const supportedFormats = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm']; // Add more video formats if needed
+
+        // Fetch images and videos from the 'cats' folder
+        fetch('cat_images.json') // Replace 'cat_images.json' with the server-side endpoint that lists files in the 'cats' folder
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(file => {
+                    const fileType = file.split('.').pop().toLowerCase();
+
+                    if (supportedFormats.includes(fileType)) {
+                        const element = fileType === 'mp4' || fileType === 'webm' ? 'video' : 'img';
+                        const source = document.createElement(element);
+
+                        if (fileType === 'mp4' || fileType === 'webm') {
+                            source.src = `cats/${file}`;
+                            source.setAttribute('type', `video/${fileType}`);
+                            source.setAttribute('autoplay', 'autoplay');
+                            source.setAttribute('loop', 'loop');
+                            source.setAttribute('muted', 'muted');
+                            source.setAttribute('playsinline', 'playsinline');
+                            source.classList.add('card-img-top');
+                            source.classList.add('video');
+                        } else {
+                            source.src = `cats/${file}`;
+                            source.classList.add('card-img-top');
+                            source.classList.add('image');
+                        }
+
+                        const card = document.createElement('div');
+                        card.classList.add('col-md-4');
+                        card.innerHTML = `
+                            <div class="card mb-4 shadow-sm">
+                                ${source.outerHTML}
+                                <div class="card-body">
+                                    <p class="card-text">${fileType === 'mp4' || fileType === 'webm' ? 'Hover to Play' : ''}</p>
+                                </div>
+                            </div>
+                        `;
+
+                        gallery.appendChild(card);
+                    }
+                });
+            });
+
+        // Background Animation Interaction
+        const background = document.querySelector('.background');
+
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            background.style.transform = `translate(-${mouseX * 50}px, -${mouseY * 50}px)`;
+        });
+
+        // Hover effect for videos
+        const videos = document.querySelectorAll('.video');
+
+        videos.forEach(video => {
+            video.addEventListener('mouseover', () => {
+                video.play();
+            });
+
+            video.addEventListener('mouseout', () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+        });
+    </script>
 </body>
 
 </html>
