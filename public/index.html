@@ -16,7 +16,7 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Cinematic Cats</a>
+        <a class="navbar-brand" href="https://sparkow.xyz/">Back To Portfolio</a>
     </nav>
 
     <!-- Main Content -->
@@ -35,52 +35,48 @@
     <script>
         const gallery = document.getElementById('gallery');
         const supportedFormats = ['jpg', 'jpeg', 'png', 'gif', 'mp4', 'webm']; // Add more video formats if needed
-        const numberOfFiles = 10; // Change this number based on the actual count of files
 
-        for (let i = 1; i <= numberOfFiles; i++) {
-            let fileExtension = '';
+        fetch('cats.json') // Replace 'cats.json' with the server-side endpoint that lists files in the 'cats' folder
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(file => {
+                    const fileType = file.split('.').pop().toLowerCase();
 
-            if (i % 2 === 0) {
-                fileExtension = 'jpg';
-            } else {
-                fileExtension = 'mp4';
-            }
+                    if (supportedFormats.includes(fileType)) {
+                        const element = fileType === 'mp4' || fileType === 'webm' ? 'video' : 'img';
+                        const source = document.createElement(element);
 
-            const file = `cat${i}.${fileExtension}`;
+                        if (fileType === 'mp4' || fileType === 'webm') {
+                            source.src = `cats/${file}`;
+                            source.setAttribute('type', `video/${fileType}`);
+                            source.setAttribute('autoplay', 'autoplay');
+                            source.setAttribute('loop', 'loop');
+                            source.setAttribute('muted', 'muted');
+                            source.setAttribute('playsinline', 'playsinline');
+                            source.classList.add('card-img-top');
+                            source.classList.add('video');
+                        } else {
+                            source.src = `cats/${file}`;
+                            source.classList.add('card-img-top');
+                            source.classList.add('image');
+                        }
 
-            if (supportedFormats.includes(fileExtension)) {
-                const element = fileExtension === 'mp4' || fileExtension === 'webm' ? 'video' : 'img';
-                const source = document.createElement(element);
+                        const card = document.createElement('div');
+                        card.classList.add('col-md-4');
+                        card.innerHTML = `
+                            <div class="card mb-4 shadow-sm">
+                                ${source.outerHTML}
+                                <div class="card-body">
+                                    <p class="card-text">${fileType === 'mp4' || fileType === 'webm' ? 'Hover to Play' : ''}</p>
+                                </div>
+                            </div>
+                        `;
 
-                if (fileExtension === 'mp4' || fileExtension === 'webm') {
-                    source.src = `cats/${file}`;
-                    source.setAttribute('type', `video/${fileExtension}`);
-                    source.setAttribute('autoplay', 'autoplay');
-                    source.setAttribute('loop', 'loop');
-                    source.setAttribute('muted', 'muted');
-                    source.setAttribute('playsinline', 'playsinline');
-                    source.classList.add('card-img-top');
-                    source.classList.add('video');
-                } else {
-                    source.src = `cats/${file}`;
-                    source.classList.add('card-img-top');
-                    source.classList.add('image');
-                }
-
-                const card = document.createElement('div');
-                card.classList.add('col-md-4');
-                card.innerHTML = `
-                    <div class="card mb-4 shadow-sm">
-                        ${source.outerHTML}
-                        <div class="card-body">
-                            <p class="card-text">${fileExtension === 'mp4' || fileExtension === 'webm' ? 'Hover to Play' : ''}</p>
-                        </div>
-                    </div>
-                `;
-
-                gallery.appendChild(card);
-            }
-        }
+                        gallery.appendChild(card);
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
 
         // Background Animation Interaction
         const background = document.querySelector('.background');
