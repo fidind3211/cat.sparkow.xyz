@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.20/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <title>cat</title>
+    <style>
+        /* Add this style for adjusted spacing */
+        .gallery-item {
+            width: calc(33.33% - 18px); /* Adjust as needed */
+            margin: 9px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add transition */
+        }
+        
+        .gallery-item img,
+        .gallery-item video {
+            width: 60%; /* Increase by 10% */
+            height: 60%; /* Increase by 10% */
+            object-fit: cover;
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease;
+            display: block; /* Ensure proper centering */
+            margin: auto; /* Center the items */
+        }
+        
+        .gallery-item video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%; /* Increase by 10% */
+            height: 60%; /* Increase by 10% */
+            object-fit: cover;
+            border-radius: 10px; /* Rounded corners */
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05); /* Slight expansion on hover */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow on hover */
+        }
+
+        /* Remove horizontal scrollbar */
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar bg-base-100">
+        <div class="navbar-start">
+            <a href="https://sparkow.xyz/" class="tooltip tooltip-bottom" data-tip="go back">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+            </a>
+        </div>
+        <div class="navbar-center">
+            <a class="btn btn-ghost text-xl">kitty cat meow site</a>
+        </div>
+        <div class="navbar-end"></div>
+    </div>
+    <div class="flex flex-wrap -m-2">
+        <div class="gallery-item">
+            <img src="/public/cat3.jpg" class="w-full h-auto">
+        </div>
+        <div class="gallery-item">
+            <video controls loop muted>
+                <source src="/public/cat2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="gallery-item">
+            <img src="/public/cat1.jpg" class="w-full h-auto">
+        </div>
+        <div class="gallery-item">
+            <img src="/public/cat4.jpg" class="w-full h-auto">
+        </div>
+        <div class="gallery-item">
+            <img src="/public/cat3.jpg" class="w-full h-auto">
+        </div>
+        <div class="gallery-item">
+            <video controls loop muted>
+                <source src="/public/cat2.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var elements = document.querySelectorAll("*");
+            elements.forEach(function(element) {
+                element.classList.add("skeleton");
+            });
+        
+            window.addEventListener("load", function() {
+                elements.forEach(function(element) {
+                    element.classList.remove("skeleton");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
